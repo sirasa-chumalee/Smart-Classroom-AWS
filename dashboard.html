@@ -58,5 +58,38 @@
   </div>
 
 </main>
+
+<!-- ── Edit Submission Modal ────────────────────── -->
+<div class="backdrop" id="backdrop-edit">
+  <div class="modal">
+    <button class="modal-close" onclick="closeBackdrop('backdrop-edit')">✕</button>
+    <div class="modal-title" id="edit-title">Lab xx</div>
+
+    <label class="field-label">Attachments</label>
+    <div id="edit-attachments"></div>
+
+    <label class="field-label">Submission</label>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+      <span style="font-family:var(--mono);font-size:12px;color:var(--muted);">Status :</span>
+      <span class="badge" id="edit-badge"></span>
+    </div>
+
+    <div class="score-box">
+      <div class="score-row">
+        <span class="score-lbl">Score</span>
+        <input class="score-inp" type="number" id="edit-score" min="0" max="100" placeholder="–" />
+        <span style="font-family:var(--mono);font-size:13px;color:var(--muted);">/100</span>
+      </div>
+      <textarea class="fb-inp" id="edit-feedback" placeholder="Add feedback for student…"></textarea>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-outline" onclick="closeBackdrop('backdrop-edit')">Cancel</button>
+      <button class="btn-primary" id="btn-save-grade" onclick="saveGrade()">Save</button>
+    </div>
+  </div>
+</div>
+
+
 </body>
 </html>
