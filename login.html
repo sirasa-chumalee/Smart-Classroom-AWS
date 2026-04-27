@@ -140,16 +140,20 @@
             outline: none;
             font-size:14px;
         }
-
-        .forgot {
-            font-size: 12px;
-            text-align: right;
-            margin-top: 5px;
-            color: #666;
-            cursor: pointer;
+        .switch-auth {
+            margin-top: 15px;
+            font-size: 13px;
+            text-align: center;
         }
-        .forgot:hover {
-            color: #464646;
+
+        .switch-auth span {
+            color: #2a5298;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .switch-auth span:hover {
+            text-decoration: underline;
         }
 
         .login-btn {
@@ -227,18 +231,33 @@
             </div>
 
 
-            <form>
+            <form id="authForm">
                 <label>Email <span>*</span></label>
                 <input type="text" placeholder="Fill your email address">
 
                 <label>Password <span>*</span></label>
                 <input type="password" placeholder="Fill your password">
-                <div class="forgot">Forgot password?</div>
-                <button class="login-btn">Sign in</button>
+
+                <div id="confirmPasswordField" style="display: none;">
+                    <label>Confirm Password <span>*</span></label>
+                    <input type="password" placeholder="Confirm your password">
+                </div>
+
+                <button class="login-btn" id="submitBtn">Sign in</button>
+
+                <div class="switch-auth">
+                    Don't have an account? <span id="openSignup"> Sign up</span>
+                </div>
             </form>
         </div>
     </div>
     <script>
+        const openSignup = document.getElementById("openSignup");
+        const confirmPasswordField = document.getElementById("confirmPasswordField");
+        const submitBtn = document.getElementById("submitBtn");
+
+        let isSignup = false; 
+
         const modal = document.getElementById("loginModal");
         const closeBtn = document.getElementById("closeModal");
         const modalTitle = document.getElementById("modalTitle");
@@ -259,10 +278,17 @@
                 }
             })
         });
-
+        function resetForm() {
+            isSignup = false;
+            modalTitle.textContent = "Login";
+            confirmPasswordField.style.display = "none";
+            submitBtn.textContent = "Sign in";
+            openSignup.textContent = "Sign up";
+        }
         // Close modal
         closeBtn.addEventListener("click", () => {
             modal.style.display = "none";
+            resetForm();
         });
 
         // Close when clicking outside
@@ -271,22 +297,22 @@
             modal.style.display = "none";
             }
         });
-        // Redirect to student or dashboard when press role button
-        // document.addEventListener("DOMContentLoaded", () => {
-        //     const button = document.querySelectorAll(".go-btn");
 
-        //     button.forEach(button => {
-        //         button.addEventListener('click', (e) => {
-        //             const role = button.querySelector(".role").innerHTML;
+        openSignup.addEventListener("click", () => {
+            isSignup = !isSignup;
 
-        //             if (role === "Student") {
-        //                 window.location.href = "student.html";
-        //             } else {
-        //                 window.location.href = "dashboard.html";
-        //             }
-        //         });
-        //     });
-        // });
+            if (isSignup) {
+                modalTitle.textContent = "Sign Up";
+                confirmPasswordField.style.display = "block";
+                submitBtn.textContent = "Create Account";
+                openSignup.textContent = "Login";
+            } else {
+                modalTitle.textContent = "Login";
+                confirmPasswordField.style.display = "none";
+                submitBtn.textContent = "Sign in";
+                openSignup.textContent = "Sign up";
+            }
+        });
     </script>
 
 
