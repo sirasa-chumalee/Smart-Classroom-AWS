@@ -14,7 +14,35 @@
             background: #00284D;
             background: linear-gradient(135deg, #1e3c72, #2a5298);
         }
+        .big-shape {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: 0;
+        }
+        .shape1 {
+            background: #4facfe81;
+            top: 10%;
+            left: 10%;
+        }
+        .shape2 {
+            background: #23c8ff84;
+            bottom: 10%;
+            right: 20%;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-30px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .shape1, .shape2 {
+            animation: float 6s ease-in-out infinite;
+        }
         .main-card {
+            position: relative;
             background-color: #ffffff;
             padding: 50px;
             display: flex;
@@ -25,6 +53,7 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.2);
             backdrop-filter: blur(10px);
             border-radius: 20px;
+            z-index: 1;
         }
         .logo {
             font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
@@ -63,6 +92,9 @@
     </style>
 </head>
 <body>
+    <div class="big-shape shape1"></div>
+    <div class="big-shape shape2"></div>
+
     <div class="main-card">
         <!-- <div class="header"> -->
             <!-- Name of "web app" -->
