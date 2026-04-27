@@ -50,7 +50,8 @@ def lambda_handler(event, context):
                 ),
 
                 "status": item.get("status", "pending")
-                "fileKey": item.get("fileKey")
+                "fileKey": item.get("fileKey"),
+                "feedback": item.get("feedback", "")
             })
 
 
