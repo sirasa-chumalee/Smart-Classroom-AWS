@@ -1,84 +1,101 @@
 import boto3
 import json
 import os
-from decimal import Decimal
 
 dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 
+
 def lambda_handler(event, context):
-    print("Received GET request for specific submission.")
+
+    print("Received GET request for submissions dashboard.")
 
     table_name = os.environ.get('TABLE_NAME', 'Submission')
+
     table = dynamodb.Table(table_name)
 
     try:
-        path_params = event.get('pathParameters') or {}
-        submission_id = path_params.get('submissionId')
 
-        if not submission_id:
-            print("Error: Missing submissionId in path parameters.")
-            return {
-                'statusCode': 400,
-                'headers': {
-                    'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/json'
-                },
-                'body': json.dumps({'error': 'Missing submissionId path parameter'})
-            }
+        response = table.scan()
 
-        print(f"Fetching record for submissionId: {submission_id}")
-        
-        # Use get_item for exact match query (Fastest operation in DynamoDB)
-        response = table.get_item(
-            Key={
-                'submissionId': submission_id
-            }
+        items = response.get('Items', [])
+
+        formatted_submissions = []
+
+        for item in items:
+
+            formatted_submissions.append({
+
+                "submissionId": item.get("submissionId"),
+
+                "labId": item.get("labId"),
+
+                "studentId": item.get("studentId"),
+
+                "submittedAt": item.get("submittedAt"),
+
+                "score": float(item.get("score", 0)),
+
+                "avgConfidence": float(
+                    item.get("avgConfidence", 0)
+                ),
+
+                "engine": item.get("engine", "pending"),
+
+                "keywordsDetected": item.get(
+                    "keywordsDetected", []
+                ),
+
+                "missingWords": item.get(
+                    "missingWords", []
+                ),
+
+                "status": item.get("status", "pending")
+                "fileKey": item.get("fileKey")
+            })
+
+
+        print(
+            f"Successfully retrieved {len(formatted_submissions)} submissions."
         )
 
-        item = response.get('Item')
-
-        if not item:
-            print(f"Record not found for submissionId: {submission_id}")
-            return {
-                'statusCode': 404,
-                'headers': {
-                    'Access-Control-Allow-Origin': '*',
-                    'Content-Type': 'application/json'
-                },
-                'body': json.dumps({'error': 'Submission not found'})
-            }
-
-        formatted_item = {
-            "submissionId": item.get("submissionId", "unknown"),
-            "labId": item.get("labId", "unknown"),
-            "studentId": item.get("studentId", "unknown"),
-            "fileKey": item.get("fileKey", "unknown"),
-            "avgConfidence": float(item.get("avgConfidence", 0.0)),
-            "score": int(item.get("score", 0)),
-            "engine": item.get("engine", "N/A"),
-            "keywordsDetected": item.get("keywordsDetected", []),
-            "status": item.get("status", "pending"),
-            "missingWords": item.get("missingWords", [])
-        }
-
-        print("Successfully retrieved record.")
 
         return {
-            'statusCode': 200,
-            'headers': {
-                'Access-Control-Allow-Origin': '*', 
-                'Access-Control-Allow-Credentials': True,
-                'Content-Type': 'application/json'
+
+            "statusCode": 200,
+
+            "headers": {
+
+                "Access-Control-Allow-Origin": "*",
+
+                "Access-Control-Allow-Credentials": True,
+
+                "Content-Type": "application/json"
+
             },
-            'body': json.dumps(formatted_item)
+
+            "body": json.dumps(formatted_submissions)
+
         }
+
 
     except Exception as e:
+
         print(f"Database Error: {str(e)}")
+
         return {
-            'statusCode': 500,
-            'headers': {
-                'Access-Control-Allow-Origin': '*'
+
+            "statusCode": 500,
+
+            "headers": {
+
+                "Access-Control-Allow-Origin": "*"
+
             },
-            'body': json.dumps({'error': 'Internal Server Error while fetching data'})
+
+            "body": json.dumps({
+
+                "error": "Internal Server Error while fetching data"
+
+            })
+
         }
