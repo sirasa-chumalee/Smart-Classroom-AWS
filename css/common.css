@@ -45,3 +45,79 @@ input, textarea, select { font-family: inherit; outline: none; }
 }
 .badge-graded, .badge-processing, .badge-failed { background: #1a1a1a; color: #fff; }
 .badge-pending, .badge-none { background: #e5e5e2; color: #555; }
+
+/* ── Modal backdrop ── */
+.backdrop {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.40);
+  backdrop-filter: blur(4px);
+  z-index: 100; align-items: center; justify-content: center; padding: 24px;
+}
+.backdrop.open { display: flex; }
+
+.modal {
+  background: var(--surface); border-radius: 18px;
+  padding: 28px; width: 100%; max-width: 480px;
+  position: relative; box-shadow: 0 20px 60px rgba(0,0,0,.18);
+  max-height: 90vh; overflow-y: auto;
+  animation: pop-in .18s ease;
+}
+.modal-wide { max-width: 840px; }
+@keyframes pop-in {
+  from { opacity:0; transform:scale(.96) translateY(10px); }
+  to   { opacity:1; transform:scale(1)   translateY(0); }
+}
+.modal-close {
+  position: absolute; top: 16px; right: 16px;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(0,0,0,.07); font-size: 13px; color: var(--muted);
+  display: flex; align-items: center; justify-content: center;
+  transition: background .12s;
+}
+.modal-close:hover { background: rgba(0,0,0,.14); color: var(--text); }
+.modal-title { font-size: 22px; font-weight: 800; letter-spacing: -.3px; margin-bottom: 20px; }
+
+/* ── Form fields ── */
+.field-label { font-size: 13px; font-weight: 700; margin-bottom: 7px; display: block; }
+.field-hint  { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 5px; }
+.text-input, .text-area, .sel {
+  width: 100%; padding: 10px 13px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--rsm);
+  background: var(--bg); font-size: 13px; color: var(--text);
+  transition: border-color .12s;
+}
+.text-input:focus, .text-area:focus, .sel:focus { border-color: #111; }
+.text-area { resize: vertical; min-height: 100px; }
+
+/* ── Modal footer ── */
+.modal-footer {
+  display: flex; gap: 10px;
+  margin-top: 20px; padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.modal-footer .btn-outline, .modal-footer .btn-primary { flex: 1; padding: 12px; }
+
+/* ── Toast ── */
+.toast {
+  position: fixed; bottom: 22px; right: 22px;
+  background: #111; color: #fff;
+  padding: 10px 16px; border-radius: var(--rsm);
+  font-family: var(--mono); font-size: 12px;
+  z-index: 999; pointer-events: none;
+  transform: translateY(50px); opacity: 0; transition: all .25s;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* ── Table ── */
+.table-wrap { background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.data-table  { width: 100%; border-collapse: collapse; }
+.data-table thead th {
+  padding: 11px 16px; text-align: left;
+  font-size: 12px; font-weight: 700; background: var(--surface);
+  border-bottom: 1.5px solid var(--border);
+}
+.data-table tbody td { padding: 13px 16px; border-bottom: 1px solid var(--border); font-size: 13px; }
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover td { background: #fafaf8; }
+.mono-cell { font-family: var(--mono); font-size: 12px; }

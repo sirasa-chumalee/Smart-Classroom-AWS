@@ -34,5 +34,78 @@
   </div>
 </aside>
 
+<!-- Main body -->
+<main class="main">
+    
+<!-- Dashboard -->
+  <div id="tab-dashboard">
+    <div class="pg-header">
+      <div class="pg-title">Dashboard</div>
+      <div class="pg-sub" id="pg-stid"></div>
+    </div>
+    <div class="lab-grid" id="lab-grid"></div>
+  </div>
+
+    <!-- Grades -->
+  <div id="tab-grades" style="display:none;">
+    <div class="pg-header">
+      <div class="pg-title">Grades</div>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>Lab</th><th>Submitted At</th><th>Status</th><th>Score</th><th>Feedback</th></tr>
+        </thead>
+        <tbody id="grades-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<!-- Submit Modal -->
+<div class="backdrop" id="backdrop-submit">
+  <div class="modal modal-wide submit-grid">
+    <button class="modal-close" onclick="closeSubmitModal()">✕</button>
+
+    <div class="submit-left">
+      <div class="modal-title" id="submit-lab-title">Lab</div>
+      <div style="border-top:1.5px solid var(--border);margin-bottom:18px;"></div>
+
+      <label class="field-label">Lab</label>
+      <div style="font-family:var(--mono);font-size:13px;margin-bottom:18px;" id="submit-lab-name"></div>
+
+      <label class="field-label">Photo</label>
+
+      <div class="dropzone" id="dropzone"
+           onclick="document.getElementById('file-inp').click()"
+           ondragover="event.preventDefault();this.classList.add('over')"
+           ondragleave="this.classList.remove('over')"
+           ondrop="onDrop(event)">
+        <div class="dz-icon">⬆</div>
+        <div class="dz-main">Upload Image</div>
+        <div class="dz-sub">Supports only PNG and JPEG<br>(max. 2 mb)</div>
+      </div>
+      <input type="file" id="file-inp" accept="image/png,image/jpeg" style="display:none"
+             onchange="onFileInput(event)" />
+
+      <div id="file-chip"></div>
+      <div id="result-area"></div>
+
+      <button class="btn-primary" id="btn-submit" onclick="doSubmit()" disabled
+              style="width:100%;margin-top:auto;">Submit</button>
+    </div>
+
+    <div class="submit-right">
+      <div class="submit-right-title">Assignment Description</div>
+      <div class="desc-text" id="submit-desc"></div>
+    </div>
+  </div>
+</div>
+
+
+<script src="js/api.js"></script>
+<script src="js/student.js"></script>
+
 </body>
 </html>
