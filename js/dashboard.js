@@ -43,7 +43,7 @@ function renderTable(subs) {
         <td>${s.submittedAt || "-"}</td>
         <td><span class="badge badge-${s.status}">${cap(s.status)}</span></td>
         <td>${s.score ?? "-"}</td>
-        <td>${s.avg_confidence ?? "-"}%</td>
+        <td>${s.avgConfidence ?? "-"}%</td>
         <td>
           <button onclick="openEditModal('${s.submissionId}')">Edit</button>
         </td>
