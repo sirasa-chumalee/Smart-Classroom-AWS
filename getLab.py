@@ -1,10 +1,11 @@
 import json
 import boto3
 
-dynamodb = boto3.resource("dynamodb", region_name="ap-southeast-1")
+dynamodb = boto3.resource("dynamodb")
 
 LAB_TABLE = "Lab"
 table = dynamodb.Table(LAB_TABLE)
+
 
 def response(status, body):
     return {
@@ -15,6 +16,7 @@ def response(status, body):
         },
         "body": json.dumps(body)
     }
+
 
 def lambda_handler(event, context):
     try:
@@ -33,18 +35,3 @@ def lambda_handler(event, context):
     except Exception as e:
         print("Error:", str(e))
         return response(500, {"error": "Failed to fetch labs"})
-
-
-if __name__ == "__main__":
-    class MockContext:
-        def __init__(self):
-            self.aws_request_id = "local-test-id-12345"
-
-    mock_event = {}
-    mock_context = MockContext()
-
-    print("Running Lambda locally...")
-    result = lambda_handler(mock_event, mock_context)
-
-    print("\nResponse:")
-    print(json.dumps(result, indent=2))
