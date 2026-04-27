@@ -41,3 +41,45 @@ def lambda_handler(event, context):
             }
 
         submission = submission_response["Item"]
+
+        # ---------- Check status ----------
+        if submission["status"] != "accepted":
+            return {
+                "statusCode": 400,
+                "headers": {
+                    "Access-Control-Allow-Origin": "*"
+                },
+                "body": json.dumps({
+                    "error": "Submission is not ready for grading"
+                })
+            }
+        
+        # ---------- Check confidence threshold ----------
+        lab_id = submission["labId"]
+        lab_response = lab_table.get_item(
+            Key={"labId": lab_id}
+        )
+
+        if "Item" not in lab_response:
+            return {
+                "statusCode": 404,
+                "headers": {
+                    "Access-Control-Allow-Origin": "*"
+                },
+                "body": json.dumps({
+                    "error": "Lab not found"
+                })
+            }
+
+        lab = lab_response["Item"]
+        min_confidence = lab.get("minConfidence", 50)
+        if submission["avgConfidence"] < min_confidence:
+            return {
+                "statusCode": 400,
+                "headers": {
+                    "Access-Control-Allow-Origin": "*"
+                },
+                "body": json.dumps({
+                    "error": "Confidence too low for grading"
+                })
+            }
