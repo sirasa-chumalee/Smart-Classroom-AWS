@@ -89,6 +89,12 @@
             width: 30px;
             height: 30px;
         }
+
+        /* login popup */
+        .modal-content {
+            background-color: white;
+
+        }
     </style>
 </head>
 <body>
@@ -116,6 +122,21 @@
             </button>
         </div>
 
+    </div>
+
+
+    <!-- Login pop ups -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+
+            <h2 id="modalTitle"> Login </h2>
+
+            <input type="text" placeholder="Username">
+            <input type="password" placeholder="Password">
+
+            <button class="login-btn"></button>
+        </div>
     </div>
     <script>
         // Redirect to student or dashboard when press role button
