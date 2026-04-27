@@ -1,10 +1,9 @@
 import boto3
 import json
 
-MY_ACCESS_KEY = "ไปเอาคีย์ในห้อง keys"
-MY_SECRET_KEY = "ไปเอาคีย์ในห้อง keys"
-MY_SESSION_TOKEN = "ไปเอาคีย์ในห้อง keys"
-
+MY_ACCESS_KEY = "XXX"
+MY_SECRET_KEY = "XXX"
+MY_SESSION_TOKEN = "XXX"
 rekognition_client = boto3.client(
     'rekognition', 
     region_name='us-east-1',
@@ -21,85 +20,119 @@ textract_client = boto3.client(
     aws_session_token=MY_SESSION_TOKEN
 )
 
-TARGET_KEYWORDS = ["enabled", "30days"]
+TARGET_KEYWORDS = {"enabled", "30days"}
+
+#Clean input text
+def normalize(text):
+    return text.lower().replace(" ", "")
+
+#เช็ค text กับ keyword
+def find_keywords(text_items):
+    found = {}
+
+    for text, confidence in text_items:
+        normalized = normalize(text)
+
+        for kw in TARGET_KEYWORDS:
+            if kw in normalized:
+                found[kw] = max(found.get(kw, 0), confidence)
+
+    return found
+
+
+def run_rekognition(image_bytes):
+    response = rekognition_client.detect_text(Image={"Bytes": image_bytes})
+
+    #เอาทั้ง text กับ confidence
+    text_items = [
+        (t["DetectedText"], t["Confidence"])
+        for t in response.get("TextDetections", [])
+    ]
+
+    return find_keywords(text_items)
+
+
+def run_textract(image_bytes):
+    response = textract_client.detect_document_text(Document={"Bytes": image_bytes})
+
+    text_items = [
+        (block["Text"], block["Confidence"])
+        for block in response.get("Blocks", [])
+        if block["BlockType"] == "LINE"
+    ]
+
+    return find_keywords(text_items)
+
 
 def lambda_handler(event, context):
-    image_filename = "test.png"
-    
-    
-    with open(image_filename, "rb") as image_file:
-        image_bytes = image_file.read()
-    
-    print(f"Starting image validation: {image_filename}")
 
+    #ใส่รูป
+    image_filename = "image.png"
+
+    with open(image_filename, "rb") as f:
+        image_bytes = f.read()
+
+    print(f"Validating image: {image_filename}")
+
+    # Tier 1: Rekognition
     try:
-        print("Executing Tier 1: Amazon Rekognition...")
-        rekog_response = rekognition_client.detect_text(
-            Image={'Bytes': image_bytes}
-        )
-        found_keywords = set()
-        for text_detail in rekog_response.get('TextDetections', []):
-            detected_text = text_detail['DetectedText'].lower()
-            for kw in TARGET_KEYWORDS:
-                if kw in detected_text:
-                    found_keywords.add(kw)
-                
-        if len(found_keywords) == len(TARGET_KEYWORDS):
-            print(f"Pass: Rekognition found all required keywords.")
+        print("Tier 1: Rekognition")
+        found = run_rekognition(image_bytes)
+
+        #ต้องเจอ Keyword ครบทุกคำถึงจะ Pass
+        if TARGET_KEYWORDS.issubset(found.keys()):
+            print("Pass: Rekognition found all required keywords.")
             return {
-                'statusCode': 200,
-                'body': json.dumps({'status': 'Pass', 'engine': 'Rekognition'})
+                "statusCode": 200,
+                "body": json.dumps({
+                    "status": "Pass",
+                    "engine": "Rekognition",
+                    "keywords": found
+                })
             }
-            
+
     except Exception as e:
         print(f"Rekognition Error: {str(e)}. Proceeding to fallback.")
 
     print("Rekognition fallback triggered. Executing Tier 2: Amazon Textract...")
-    
+
+    # Tier 2: Textract
     try:
-        textract_response = textract_client.detect_document_text(
-            Document={'Bytes': image_bytes}
-        )
-        
-        textract_found_keywords = set()
-        for block in textract_response.get('Blocks', []):
-            if block['BlockType'] == 'LINE':
-                detected_text = block.get('Text', '').lower()
-                for kw in TARGET_KEYWORDS:
-                    if kw in detected_text:
-                        textract_found_keywords.add(kw)
-                    
-        if len(textract_found_keywords) == len(TARGET_KEYWORDS):
-            print(f"Pass: Textract found all required keywords.")
+        print("Tier 2: Textract")
+        found = run_textract(image_bytes)
+
+        if TARGET_KEYWORDS.issubset(found.keys()):
+            print("Pass: Textract found all required keywords.")
             return {
-                'statusCode': 200,
-                'body': json.dumps({'status': 'Pass', 'engine': 'Textract'})
-            }
-        else:
-            missing = list(set(TARGET_KEYWORDS) - textract_found_keywords)
-            print(f"Reject: Missing keywords: {missing}")
-            return {
-                'statusCode': 200, 
-                'body': json.dumps({
-                    'status': 'Reject', 
-                    'reason': 'Missing Keywords',
-                    'missing': missing
+                "statusCode": 200,
+                "body": json.dumps({
+                    "status": "Pass",
+                    "engine": "Textract",
+                    "keywords": found
                 })
             }
-            
-    except Exception as e:
-        print(f"Textract Error: {str(e)}")
+
+        missing = list(TARGET_KEYWORDS - set(found.keys()))
+        print(f"Reject: Missing keywords: {missing}")
+
         return {
-            'statusCode': 500,
-            'body': json.dumps({'status': 'Error', 'message': 'Internal Server Error'})
+            "statusCode": 200,
+            "body": json.dumps({
+                "status": "Reject",
+                "missing": missing,
+                "detected_keywords": found
+            })
         }
 
+    except Exception as e:
+        print("Textract error:", str(e))
+
+        return {
+            "statusCode": 500,
+            "body": json.dumps({"status": "Error"})
+        }
+
+
 if __name__ == "__main__":
-    print("Initializing mock Lambda execution...")
-    
-    mock_event = {} 
-    
-    result = lambda_handler(mock_event, None)
-    
-    print("\nSimulated API Response:")
+    result = lambda_handler({}, None)
     print(json.dumps(result, indent=4))
