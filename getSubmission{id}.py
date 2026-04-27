@@ -3,23 +3,18 @@ import json
 import os
 from decimal import Decimal
 
-class DecimalEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, Decimal):
-            if obj % 1 == 0:
-                return int(obj)
-            return float(obj)
-        return super(DecimalEncoder, self).default(obj)
-
 dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 
 def lambda_handler(event, context):
     print("Received GET request for specific submission.")
-    
+
+    table_name = os.environ.get('TABLE_NAME', 'Submission')
+    table = dynamodb.Table(table_name)
+
     try:
         path_params = event.get('pathParameters') or {}
         submission_id = path_params.get('submissionId')
-        
+
         if not submission_id:
             print("Error: Missing submissionId in path parameters.")
             return {
@@ -31,19 +26,17 @@ def lambda_handler(event, context):
                 'body': json.dumps({'error': 'Missing submissionId path parameter'})
             }
 
-        table_name = os.environ.get('TABLE_NAME', 'Submission')
-        table = dynamodb.Table(table_name)
-        
         print(f"Fetching record for submissionId: {submission_id}")
         
+        # Use get_item for exact match query (Fastest operation in DynamoDB)
         response = table.get_item(
             Key={
                 'submissionId': submission_id
             }
         )
-        
+
         item = response.get('Item')
-        
+
         if not item:
             print(f"Record not found for submissionId: {submission_id}")
             return {
@@ -55,38 +48,37 @@ def lambda_handler(event, context):
                 'body': json.dumps({'error': 'Submission not found'})
             }
 
+        formatted_item = {
+            "submissionId": item.get("submissionId", "unknown"),
+            "labId": item.get("labId", "unknown"),
+            "studentId": item.get("studentId", "unknown"),
+            "fileKey": item.get("fileKey", "unknown"),
+            "avgConfidence": float(item.get("avgConfidence", 0.0)),
+            "grade": int(item.get("grade", 0)),
+            "engine": item.get("engine", "N/A"),
+            "keywordsDetected": item.get("keywordsDetected", []),
+            "status": item.get("status", "pending"),
+            "missingWords": item.get("missingWords", [])
+        }
+
         print("Successfully retrieved record.")
-        
+
         return {
             'statusCode': 200,
             'headers': {
-                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Origin': '*', 
+                'Access-Control-Allow-Credentials': True,
                 'Content-Type': 'application/json'
             },
-            'body': json.dumps(item, cls=DecimalEncoder)
+            'body': json.dumps(formatted_item)
         }
-        
+
     except Exception as e:
-        print(f"Error fetching submission: {str(e)}")
+        print(f"Database Error: {str(e)}")
         return {
             'statusCode': 500,
             'headers': {
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json'
+                'Access-Control-Allow-Origin': '*'
             },
-            'body': json.dumps({'error': 'Internal Server Error'})
+            'body': json.dumps({'error': 'Internal Server Error while fetching data'})
         }
-
-if __name__ == "__main__":
-    print("Initializing mock Lambda execution for GET /submissions/{submissionId}...")
-    
-    mock_event = {
-        "pathParameters": {
-            "submissionId": "sub-123"
-        }
-    }
-    
-    result = lambda_handler(mock_event, None)
-    
-    print("\nSimulated API Response:")
-    print(json.dumps(result, indent=4))
