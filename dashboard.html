@@ -90,6 +90,63 @@
   </div>
 </div>
 
+<!-- ── Create Lab Modal ──────────────────────────── -->
+<div class="backdrop" id="backdrop-create">
+  <div class="modal">
+    <button class="modal-close" onclick="closeBackdrop('backdrop-create')">✕</button>
+    <div class="modal-title" id="create-title">Lab x</div>
 
+    <label class="field-label">Assignment Description</label>
+    <div class="desc-box">
+      <textarea id="new-desc" placeholder="Describe the lab instructions…"></textarea>
+    </div>
+
+    <label class="field-label" style="margin-top:14px;">Keywords to Detect</label>
+    <input class="text-input" id="new-keywords" type="text" placeholder="e.g. enabled, 30days, active" />
+    <div class="field-hint">Rekognition / Textract scans submitted screenshots for these words</div>
+
+    <div style="margin-top:16px;">
+      <div class="dropzone" id="create-dropzone"
+           onclick="document.getElementById('create-file-inp').click()"
+           ondragover="event.preventDefault();this.classList.add('over')"
+           ondragleave="this.classList.remove('over')"
+           ondrop="event.preventDefault();setCreateFile(event.dataTransfer.files[0])">
+        <div class="dz-icon">⬆</div>
+        <div class="dz-main">Drag and drop files here or <a style="text-decoration:underline;cursor:pointer;">BROWSE</a></div>
+        <div class="dz-sub">Supports PNG, JPEG, PDF</div>
+      </div>
+      <input type="file" id="create-file-inp" accept="image/*,.pdf" style="display:none"
+             onchange="setCreateFile(this.files[0])" />
+      <div id="create-file-chip"></div>
+    </div>
+
+    <div class="settings-row">
+      <div class="settings-col">
+        <label class="field-label" style="font-size:13px;">Assignment Settings</label>
+        <div class="radio-group">
+          <label class="r-opt"><input type="radio" name="grading" value="ungraded" /> Ungraded</label>
+          <label class="r-opt"><input type="radio" name="grading" value="points" checked /> Points</label>
+          <input class="pts-inp" type="number" id="new-points" value="100" />
+        </div>
+      </div>
+      <div class="settings-col">
+        <label class="field-label" style="font-size:13px;">Due Date</label>
+        <div class="radio-group">
+          <label class="r-opt"><input type="radio" name="due" value="none" checked /> No due date</label>
+          <label class="r-opt"><input type="radio" name="due" value="date" /> Date &amp; Time 📅</label>
+        </div>
+        <input type="datetime-local" id="new-due" class="text-input"
+               style="display:none;margin-top:8px;font-family:var(--mono);font-size:12px;" />
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-outline" onclick="closeBackdrop('backdrop-create')">Cancel</button>
+      <button class="btn-primary" id="btn-post-lab" onclick="postLab()">Post</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
 </body>
 </html>
