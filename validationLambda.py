@@ -1,153 +1,196 @@
 import boto3
 import json
+from decimal import Decimal
 
-MY_ACCESS_KEY = "XXX"
-MY_SECRET_KEY = "XXX"
-MY_SESSION_TOKEN = "XXX"
 
-rekognition_client = boto3.client(
-    'rekognition',
-    region_name='us-east-1',
-    aws_access_key_id=MY_ACCESS_KEY,
-    aws_secret_access_key=MY_SECRET_KEY,
-    aws_session_token=MY_SESSION_TOKEN
-)
+rekognition_client = boto3.client('rekognition')
+textract_client = boto3.client('textract')
+s3_client = boto3.client('s3')
+dynamodb = boto3.resource("dynamodb")
 
-textract_client = boto3.client(
-    'textract',
-    region_name='us-east-1',
-    aws_access_key_id=MY_ACCESS_KEY,
-    aws_secret_access_key=MY_SECRET_KEY,
-    aws_session_token=MY_SESSION_TOKEN
-)
 
-s3_client = boto3.client(
-    's3',
-    region_name='us-east-1',
-    aws_access_key_id=MY_ACCESS_KEY,
-    aws_secret_access_key=MY_SECRET_KEY,
-    aws_session_token=MY_SESSION_TOKEN
-)
+LAB_TABLE = "Lab"
+lab_table = dynamodb.Table(LAB_TABLE)
 
-TARGET_KEYWORDS = {"enabled", "30days"}
-MIN_CONFIDENCE = 90
+
+SUBMISSION_TABLE = "Submission"
+submission_table = dynamodb.Table(SUBMISSION_TABLE)
+
+
+
 
 def normalize(text):
-    """Clean input """
     return text.lower().replace(" ", "")
 
-def find_keywords(text_items):
+
+
+
+def find_keywords(text_items, target_keywords, min_confidence):
     found_keywords = set()
     confidences = []
 
+
     for text, confidence in text_items:
-        if confidence < MIN_CONFIDENCE:
+        if confidence < min_confidence:
             continue
+
+
         normalized = normalize(text)
-        for kw in TARGET_KEYWORDS:
+
+
+        for kw in target_keywords:
             if kw in normalized:
                 found_keywords.add(kw)
                 confidences.append(confidence)
 
+
     avg_conf = sum(confidences) / len(confidences) if confidences else 0
     return found_keywords, avg_conf
 
-def run_rekognition(image_bytes):
+
+
+
+def run_rekognition(image_bytes, target_keywords, min_confidence):
     response = rekognition_client.detect_text(Image={"Bytes": image_bytes})
+
+
     text_items = [
         (t["DetectedText"], t["Confidence"])
         for t in response.get("TextDetections", [])
     ]
-    return find_keywords(text_items)
 
-def run_textract(image_bytes):
-    response = textract_client.detect_document_text(Document={"Bytes": image_bytes})
+
+    return find_keywords(text_items, target_keywords, min_confidence)
+
+
+
+
+def run_textract(image_bytes, target_keywords, min_confidence):
+    response = textract_client.detect_document_text(
+        Document={"Bytes": image_bytes}
+    )
+
+
     text_items = [
         (block["Text"], block["Confidence"])
         for block in response.get("Blocks", [])
         if block["BlockType"] == "LINE"
     ]
-    return find_keywords(text_items)
 
-#Lambda
+
+    return find_keywords(text_items, target_keywords, min_confidence)
+
+
+
+
+def save_submission_result(lab_id, submission_id, engine, avg_conf, status, keywords_detected, missing):
+    submission_table.put_item(
+        Item={
+            "labId": lab_id,
+            "submissionId": submission_id,
+            "engine": engine,
+            "avgConfidence": Decimal(str(round(avg_conf, 2))),
+            "status": status,
+            "keywordsDetected": list(keywords_detected),
+            "missingWords": list(missing)
+        }
+    )
+
+
+
+
 def lambda_handler(event, context):
-    bucket_name = "thisone99"
-    image_key = "image (1).png"
 
-    print(f"Fetching image from S3: {image_key} ...")
+
+    # Detect if this is S3 trigger or API Gateway
+    if "Records" in event:  # S3 trigger
+        record = event["Records"][0]
+        bucket_name = record["s3"]["bucket"]["name"]
+        image_key = record["s3"]["object"]["key"]
+    else:  # API Gateway
+        body = json.loads(event.get("body", "{}"))
+        bucket_name = body["bucket"]
+        image_key = body["key"]
+
+
+    parts = image_key.split("/")
+    lab_id = parts[1]
+    submission_id = parts[3]
+
+
+    print("Processing:", image_key)
+
+
+    lab_response = lab_table.get_item(Key={"labId": lab_id})
+
+
+    if "Item" not in lab_response:
+        print("Lab not found:", lab_id)
+        return {
+            "statusCode": 404,
+            "body": json.dumps({"error": "Lab not found"})
+        }
+
+
+    lab = lab_response["Item"]
+
+
+    target_keywords = set(normalize(k) for k in lab.get("keywords", []))
+    min_confidence = lab.get("minConfidence", 50)
+
+
+    print("Keywords:", target_keywords)
+    print("Min confidence:", min_confidence)
+
+
+    # Get image from S3
+    response = s3_client.get_object(Bucket=bucket_name, Key=image_key)
+    image_bytes = response["Body"].read()
+
+
+    # --- Run Rekognition ---
     try:
-        response = s3_client.get_object(Bucket=bucket_name, Key=image_key)
-        image_bytes = response["Body"].read()
-        print("Image loaded successfully\n")
-    except Exception as e:
-        print("Error fetching image:", str(e))
-        return {"statusCode": 500, "body": {"error": "Cannot fetch image from S3"}}
-
-    #Rekognition
-    try:
-        print("Running Rekognition...")
-        found, avg_conf = run_rekognition(image_bytes)
-        print("Rekognition result:", [(t, round(c,2)) for t, c in zip(found, [avg_conf]*len(found))])
-
-        if TARGET_KEYWORDS.issubset(found):
-            print("Rekognition PASS\n")
+        found, avg_conf = run_rekognition(image_bytes, target_keywords, min_confidence)
+        if target_keywords.issubset(found):
+            status = "accepted"
+            save_submission_result(lab_id, submission_id, "Rekognition", avg_conf, status, found, [])
             return {
                 "statusCode": 200,
-                "body": {
-                    "submissionId": event.get("submissionId", ""),
+                "body": json.dumps({
+                    "labId": lab_id,
+                    "submissionId": submission_id,
                     "avg_confidence": round(avg_conf, 2),
                     "engine": "Rekognition",
                     "keywordDetected": list(found),
-                    "status": "accepted",
+                    "status": status,
                     "missing_words": []
-                }
+                })
             }
     except Exception as e:
         print("Rekognition failed:", str(e))
-        print("Falling back to Textract...\n")
 
-    #Textract
+
+    # --- Textract fallback ---
     try:
-        print("Running Textract...")
-        found, avg_conf = run_textract(image_bytes)
-        print("Textract result:", [(t, round(avg_conf,2)) for t, c in zip(found, [avg_conf]*len(found))])
-
-        missing = list(TARGET_KEYWORDS - set(found))
-        if not missing:
-            print("Textract PASS\n")
-            return {
-                "statusCode": 200,
-                "body": {
-                    "submissionId": event.get("submissionId", ""),
-                    "avg_confidence": round(avg_conf, 2),
-                    "engine": "Textract",
-                    "keywordDetected": list(found),
-                    "status": "accepted",
-                    "missing_words": []
-                }
-            }
-        else:
-            print("Keywords missing:", missing)
-            return {
-                "statusCode": 200,
-                "body": {
-                    "submissionId": event.get("submissionId", ""),
-                    "avg_confidence": round(avg_conf, 2),
-                    "engine": "Textract",
-                    "keywordDetected": list(found),
-                    "status": "failed",
-                    "missing_words": missing
-                }
-            }
+        found, avg_conf = run_textract(image_bytes, target_keywords, min_confidence)
+        missing = list(target_keywords - found)
+        status = "accepted" if not missing else "failed"
+        save_submission_result(lab_id, submission_id, "Textract", avg_conf, status, found, missing)
+        return {
+            "statusCode": 200,
+            "body": json.dumps({
+                "labId": lab_id,
+                "submissionId": submission_id,
+                "avg_confidence": round(avg_conf, 2),
+                "engine": "Textract",
+                "keywordDetected": list(found),
+                "status": status,
+                "missing_words": missing
+            })
+        }
     except Exception as e:
         print("Textract error:", str(e))
         return {
             "statusCode": 500,
-            "body": {"error": "Textract failed"}
+            "body": json.dumps({"error": "Processing failed"})
         }
-
-if __name__ == "__main__":
-    test_event = {"submissionId": "sub-123"} #test local
-    result = lambda_handler(test_event, None)
-    print("\nFINAL RESULT:")
-    print(json.dumps(result, indent=4))
