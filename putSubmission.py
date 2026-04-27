@@ -83,3 +83,32 @@ def lambda_handler(event, context):
                     "error": "Confidence too low for grading"
                 })
             }
+        
+        # ---------- Update submission ----------
+        submission_table.update_item(
+            Key={
+                "submissionId": submission_id
+            },
+            UpdateExpression="""
+                SET score = :s,
+                    feedback = :f,
+                    #st = :status
+            """,
+            ExpressionAttributeNames={
+                "#st": "status"
+            },
+            ExpressionAttributeValues={
+                ":s": Decimal(str(score)),
+                ":f": feedback,
+                ":status": "graded"
+            }
+        )
+        return {
+            "statusCode": 200,
+            "headers": {
+                "Access-Control-Allow-Origin": "*"
+            },
+            "body": json.dumps({
+                "message": "Grade saved successfully"
+            })
+        }
