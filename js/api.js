@@ -68,7 +68,7 @@ async function apiGetAllSubmissions() {
 
 // PUT /submissions/{submissionId}
 async function apiSaveGrade(submissionId, score, feedback) {
-    const res = await fetch(`${API_BASE}/submissions/${submissionId}`, {
+    const res = await fetch(`${API_BASE}/submissions/${submissionId}/grade`, {
         method : "PUT",
         headers : authHeaders(),
         body : JSON.stringify({score, feedback})
