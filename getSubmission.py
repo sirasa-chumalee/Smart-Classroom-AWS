@@ -20,11 +20,11 @@ def lambda_handler(event, context):
         for item in items:
             formatted_submissions.append({
                 "submissionId": item.get("submissionId", "unknown"),
-                "avg_confidence": float(item.get("avgConfidence", 0.0)),
+                "avgConfidence": float(item.get("avgConfidence", 0.0)),
                 "engine": item.get("engine", "N/A"),
-                "keywordDetected": item.get("keywordDetected", []),
+                "keywordsDetected": item.get("keywordsDetected", []),
                 "status": item.get("status", "pending"),
-                "missing_words": item.get("missingWords", [])
+                "missingWords": item.get("missingWords", [])
             })
 
         print(f"Successfully retrieved {len(formatted_submissions)} submissions.")
