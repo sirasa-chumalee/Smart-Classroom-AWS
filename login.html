@@ -11,7 +11,8 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #f2f2f0;
+            background: #08104f;
+            background: radial-gradient(circle,rgba(8, 16, 79, 1) 0%, rgba(63, 95, 191, 1) 100%); 
         }
         .main-card {
             background-color: #ffffff;
@@ -52,8 +53,9 @@
         .desc {
             padding: 10px 0px 30px 0px;
         }
-        .role {
-            /* background-color: pink; */
+        .clipboard-clock, .notebook {
+            width: 30px;
+            height: 30px;
         }
     </style>
 </head>
@@ -69,12 +71,12 @@
 
         <div class="btn-row">
             <button class="go-btn" id="role-button">
-                <span><i data-lucide="graduation-cap" stroke-width="2"></i> </span>
+                <span><i data-lucide="notebook" stroke-width="1.75" class="notebook"></i> </span>
                 <span class="role">Student</span>
             </button>
 
             <button class="go-btn" id="role-button">
-                <span><i data-lucide="library-big" stroke-width="2"></i> </span>
+                <span><i data-lucide="clipboard-clock" stroke-width="1.75" class="clipboard-clock"></i> </span>
                 <span class="role">Teacher</span>
             </button>
         </div>
