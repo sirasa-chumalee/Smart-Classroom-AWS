@@ -1,0 +1,47 @@
+/* ── common.css ─ shared across all pages ── */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=Bricolage+Grotesque:wght@400;600;700;800&display=swap');
+
+:root {
+  --bg:       #f2f2f0;
+  --surface:  #ffffff;
+  --border:   #e0dfd9;
+  --text:     #111111;
+  --muted:    #9a9991;
+  --mono:     'IBM Plex Mono', monospace;
+  --sans:     'Bricolage Grotesque', sans-serif;
+  --radius:   12px;
+  --rsm:      8px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 14px; }
+button { cursor: pointer; font-family: inherit; border: none; outline: none; }
+input, textarea, select { font-family: inherit; outline: none; }
+
+/* ── Buttons ── */
+.btn-primary {
+  background: #111; color: #fff;
+  padding: 12px 22px; border-radius: var(--rsm);
+  font-size: 14px; font-weight: 700;
+  transition: opacity .15s;
+}
+.btn-primary:hover { opacity: .82; }
+.btn-primary:disabled { opacity: .35; cursor: not-allowed; }
+
+.btn-outline {
+  background: none; color: var(--text);
+  border: 1.5px solid var(--border);
+  padding: 11px 22px; border-radius: var(--rsm);
+  font-size: 14px; font-weight: 700;
+  transition: background .12s;
+}
+.btn-outline:hover { background: var(--bg); }
+
+/* ── Badges ── */
+.badge {
+  display: inline-block; padding: 3px 10px;
+  border-radius: 6px; font-size: 11px;
+  font-weight: 600; font-family: var(--mono);
+}
+.badge-graded, .badge-processing, .badge-failed { background: #1a1a1a; color: #fff; }
+.badge-pending, .badge-none { background: #e5e5e2; color: #555; }
