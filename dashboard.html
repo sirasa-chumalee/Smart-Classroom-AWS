@@ -7,7 +7,7 @@
 </head>
 <body>
     
-<!-- ── Sidebar ──────────────────────────────────── -->    
+<!-- ── Sidebar ──────────────────────────────────── -->
 <aside class="sidebar">
   <div class="sidebar-brand">Grader</div>
   <div class="sidebar-icons">
@@ -24,10 +24,10 @@
   </div>
 </aside>
 
-    <main class="main">
-
 <!-- ── Main ─────────────────────────────────────── -->
-  <div>
+<main class="main">
+
+  <div class="filter-bar">
     <select class="f-select" id="f-lab">
       <option value="">Choose Lab</option>
       <option>Lab 1</option><option>Lab 2</option>
@@ -38,6 +38,24 @@
       <option>Graded</option><option>Processing</option>
       <option>Failed</option><option>Pending</option>
     </select>
+    <div class="f-search-wrap">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="f-input" id="f-search" type="text" placeholder="Search student ID…" />
+    </div>
+    <button class="btn-primary" style="padding:9px 20px;font-size:13px;" onclick="applyFilter()">Filter</button>
+  </div>
+
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Lab ID</th><th>Student ID</th><th>Submitted At</th>
+          <th>Status</th><th>Score</th><th>CI Score</th><th></th>
+        </tr>
+      </thead>
+      <tbody id="sub-tbody"></tbody>
+    </table>
+  </div>
 
 </main>
 </body>
