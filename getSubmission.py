@@ -8,7 +8,7 @@ dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 def lambda_handler(event, context):
     print("Received GET request for submissions dashboard.")
 
-    table_name = os.environ.get('TABLE_NAME', 'your-dynamodb-table-name')
+    table_name = os.environ.get('TABLE_NAME', 'Submission')
     table = dynamodb.Table(table_name)
 
     try:
@@ -20,11 +20,11 @@ def lambda_handler(event, context):
         for item in items:
             formatted_submissions.append({
                 "submissionId": item.get("submissionId", "unknown"),
-                "avg_confidence": float(item.get("avg_confidence", 0.0)),
+                "avg_confidence": float(item.get("avgConfidence", 0.0)),
                 "engine": item.get("engine", "N/A"),
                 "keywordDetected": item.get("keywordDetected", []),
                 "status": item.get("status", "pending"),
-                "missing_words": item.get("missing_words", [])
+                "missing_words": item.get("missingWords", [])
             })
 
         print(f"Successfully retrieved {len(formatted_submissions)} submissions.")
