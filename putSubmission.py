@@ -112,3 +112,15 @@ def lambda_handler(event, context):
                 "message": "Grade saved successfully"
             })
         }
+    
+    except Exception as e:
+        print("Error:", str(e))
+        return {
+            "statusCode": 500,
+            "headers": {
+                "Access-Control-Allow-Origin": "*"
+            },
+            "body": json.dumps({
+                "error": "Internal server error"
+            })
+        }
