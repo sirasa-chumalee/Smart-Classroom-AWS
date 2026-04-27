@@ -11,8 +11,8 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: #08104f;
-            background: radial-gradient(circle,rgba(8, 16, 79, 1) 0%, rgba(63, 95, 191, 1) 100%); 
+            background: #00284D;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
         }
         .main-card {
             background-color: #ffffff;
@@ -22,7 +22,9 @@
             flex-direction:column;
             border-radius: 20px;
             width: 420px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, .08);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
         }
         .logo {
             font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
@@ -51,7 +53,8 @@
             box-shadow:0 6px 20px rgba(0,0,0,.12);
         }
         .desc {
-            padding: 10px 0px 30px 0px;
+            padding-top: 10px;
+            padding-bottom: 50px;
         }
         .clipboard-clock, .notebook {
             width: 30px;
@@ -63,7 +66,7 @@
     <div class="main-card">
         <!-- <div class="header"> -->
             <!-- Name of "web app" -->
-            <div class="logo">Checker</div>
+            <div class="logo">Checkly</div>
 
             <div class="desc"> Choose a role to log in to</div>            
         <!-- </div> -->
