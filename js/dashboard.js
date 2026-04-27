@@ -63,9 +63,9 @@ function applyFilter() {
     renderTable(data);
 }
 
-function openEditModal(subId) {
+async function openEditModal(subId) {
     const s = allSubs.find(x => x.submissionId === subId);
-    if(!s) return;
+    if (!s) return;
 
     editingSubId = subId;
 
@@ -73,20 +73,40 @@ function openEditModal(subId) {
 
     document.getElementById("edit-title").textContent =
         lab ? lab.title : s.labId;
-    document.getElementById("edit-score").value = s.score ?? "";
-    document.getElementById("edit-feedback").value = s.feedback || "";
+
+    document.getElementById("edit-score").value =
+        s.score ?? "";
+
+    document.getElementById("edit-feedback").value =
+        s.feedback || "";
 
     const badge = document.getElementById("edit-badge");
     badge.className = "badge badge-" + s.status;
     badge.textContent = cap(s.status);
 
-    document.getElementById("edit-attachments").innerHTML =
-        (s.files || []).map(f => `
-            <div class="attach-item">
-            <span>📄</span>
-            <span>${f}</span>
-            </div>
-        `).join("");
+    // LOAD SUBMISSION IMAGE
+    if (s.fileKey) {
+        try {
+            const res = await fetch(
+                `${API_BASE}/file-url?key=${encodeURIComponent(s.fileKey)}`,
+                { headers: authHeaders() }
+            );
+
+            const data = await res.json();
+            const imageUrl = JSON.parse(data.body).url;
+
+            document.getElementById("edit-attachments").innerHTML = `
+                <img src="${imageUrl}"
+                      style="max-width:100%;
+                             border-radius:8px;">`;
+
+        } catch (err) {
+            console.error("Image load failed:", err);
+            document.getElementById("edit-attachments").innerHTML = "Unable to load attachment.";
+        }
+    } else {
+        document.getElementById("edit-attachments").innerHTML = "No attachment.";
+    }
 
     openBackdrop("backdrop-edit");
 }
