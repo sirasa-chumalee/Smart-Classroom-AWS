@@ -1,0 +1,54 @@
+import json
+import boto3
+import os
+from decimal import Decimal
+
+dynamodb = boto3.resource("dynamodb")
+table = dynamodb.Table(os.environ.get("TABLE_NAME", "Submission"))
+
+
+def decimal_to_float(obj):
+    if isinstance(obj, Decimal):
+        return float(obj)
+    raise TypeError
+
+
+def response(status, body):
+    return {
+        "statusCode": status,
+        "headers": {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+        },
+        "body": json.dumps(body, default=decimal_to_float)
+    }
+
+
+def lambda_handler(event, context):
+
+    try:
+
+        claims = event["requestContext"]["authorizer"]["jwt"]["claims"]
+
+        student_id = (
+            claims.get("preferred_username")
+            or claims.get("username")
+            or claims.get("sub")
+        )
+
+        db_response = table.scan()
+
+        items = db_response.get("Items", [])
+
+        student_submissions = [
+            item for item in items
+            if item.get("studentId") == student_id
+        ]
+
+        return response(200, student_submissions)
+
+    except Exception as e:
+
+        print("ERROR:", str(e))
+
+        return response(500, {"error": "Failed to fetch submissions"})
