@@ -1,0 +1,73 @@
+
+/* Sidebar */
+.sidebar {
+  width: 220px; background: #e8e7e2;
+  position: fixed; top: 0; left: 0; bottom: 0;
+  display: flex; flex-direction: column;
+}
+.sidebar-brand { padding: 22px 18px 16px; font-size: 22px; font-weight: 800; }
+.sidebar-nav   { flex: 1; padding: 4px 10px; display: flex; flex-direction: column; gap: 2px; }
+.nav-btn {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: var(--rsm);
+  font-size: 14px; font-weight: 600; color: var(--muted);
+  background: none; border: none; text-align: left; width: 100%;
+  transition: all .12s;
+}
+.nav-btn:hover  { color: var(--text); background: rgba(0,0,0,.05); }
+.nav-btn.active { color: var(--text); background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+.sidebar-bottom { padding: 14px 18px; border-top: 1px solid var(--border); }
+.user-row  { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.avatar    { width: 32px; height: 32px; border-radius: 50%; background: #111; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+.u-name    { font-size: 13px; font-weight: 700; }
+.u-email   { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+
+/* Main */
+.main    { margin-left: 220px; padding: 30px 34px; }
+.pg-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 26px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.pg-title  { font-size: 28px; font-weight: 800; letter-spacing: -.4px; }
+.pg-sub    { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+/* Lab cards */
+.lab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 14px; }
+.lab-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: 16px; padding: 20px; cursor: pointer; min-height: 170px;
+  display: flex; flex-direction: column; transition: box-shadow .15s, transform .15s, border-color .15s;
+}
+.lab-card:hover { box-shadow: 0 6px 22px rgba(0,0,0,.10); transform: translateY(-2px); border-color: #bbb; }
+.lc-name { font-size: 23px; font-weight: 800; margin: 8px 0 4px; }
+.lc-desc { font-family: var(--mono); font-size: 11px; color: var(--muted); }
+
+/* Submit modal two-column layout */
+.submit-grid {
+  display: grid; grid-template-columns: 1fr 1fr; min-height: 500px;
+  background: var(--bg); border-radius: 18px; overflow: hidden;
+}
+.submit-left  { padding: 28px; border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+.submit-right { padding: 28px; background: #ebebeb; overflow-y: auto; }
+.submit-right-title { font-size: 15px; font-weight: 800; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1.5px solid #d6d5ce; }
+.desc-text { font-size: 12px; line-height: 1.75; color: #333; white-space: pre-wrap; }
+
+/* Drop zone */
+.dropzone {
+  border: 2px dashed #c5c4bc; border-radius: 12px;
+  background: #ebebeb; padding: 32px 20px;
+  text-align: center; cursor: pointer; flex: 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px;
+  transition: border-color .15s, background .15s; margin-bottom: 16px;
+}
+.dropzone:hover, .dropzone.over { border-color: #111; background: #e2e1dc; }
+.dz-icon { font-size: 24px; }
+.dz-main { font-size: 13px; font-weight: 600; }
+.dz-sub  { font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+/* File chip */
+.file-chip { display: flex; align-items: center; gap: 8px; background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--rsm); padding: 8px 12px; font-family: var(--mono); font-size: 12px; margin-bottom: 14px; }
+.chip-rm   { margin-left: auto; cursor: pointer; color: #aaa; }
+.chip-rm:hover { color: #c00; }
+
+/* Result message */
+.result-msg { font-family: var(--mono); font-size: 12px; padding: 10px 12px; border-radius: var(--rsm); margin-bottom: 12px; }
+.result-pass { background: #e6f4ed; color: #1a7a4a; }
+.result-fail { background: #fde8e8; color: #b91c1c; }

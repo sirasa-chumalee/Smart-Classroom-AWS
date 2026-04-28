@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="css/common.css" />
+  <link rel="stylesheet" href="css/student.css" />
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-brand">Checker</div>
+  <nav class="sidebar-nav">
+    <button class="nav-btn active" onclick="showTab('dashboard', this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Dashboard
+    </button>
+    <button class="nav-btn" onclick="showTab('grades', this)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Grades
+    </button>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="user-row">
+      <div class="avatar" id="u-avatar">S</div>
+      <div>
+        <div class="u-name"  id="u-name">Student</div>
+        <div class="u-email" id="u-email">student@tu.ac.th</div>
+      </div>
+    </div>
+    <button class="btn-outline" style="width:100%;padding:8px;font-size:12px;" onclick="logout()">Sign Out</button>
+  </div>
+</aside>
+
+<!-- Main body -->
+<main class="main">
+    
+<!-- Dashboard -->
+  <div id="tab-dashboard">
+    <div class="pg-header">
+      <div class="pg-title">Dashboard</div>
+      <div class="pg-sub" id="pg-stid"></div>
+    </div>
+    <div class="lab-grid" id="lab-grid"></div>
+  </div>
+
+    <!-- Grades -->
+  <div id="tab-grades" style="display:none;">
+    <div class="pg-header">
+      <div class="pg-title">Grades</div>
+    </div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>Lab</th><th>Submitted At</th><th>Status</th><th>Score</th><th>Feedback</th></tr>
+        </thead>
+        <tbody id="grades-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<!-- Submit Modal -->
+<div class="backdrop" id="backdrop-submit">
+  <div class="modal modal-wide submit-grid">
+    <button class="modal-close" onclick="closeSubmitModal()">✕</button>
+
+    <div class="submit-left">
+      <div class="modal-title" id="submit-lab-title">Lab</div>
+      <div style="border-top:1.5px solid var(--border);margin-bottom:18px;"></div>
+
+      <label class="field-label">Lab</label>
+      <div style="font-family:var(--mono);font-size:13px;margin-bottom:18px;" id="submit-lab-name"></div>
+
+      <label class="field-label">Photo</label>
+
+      <div class="dropzone" id="dropzone"
+           onclick="document.getElementById('file-inp').click()"
+           ondragover="event.preventDefault();this.classList.add('over')"
+           ondragleave="this.classList.remove('over')"
+           ondrop="onDrop(event)">
+        <div class="dz-icon">⬆</div>
+        <div class="dz-main">Upload Image</div>
+        <div class="dz-sub">Supports only PNG and JPEG<br>(max. 2 mb)</div>
+      </div>
+      <input type="file" id="file-inp" accept="image/png,image/jpeg" style="display:none"
+             onchange="onFileInput(event)" />
+
+      <div id="file-chip"></div>
+      <div id="result-area"></div>
+
+      <button class="btn-primary" id="btn-submit" onclick="doSubmit()" disabled
+              style="width:100%;margin-top:auto;">Submit</button>
+    </div>
+
+    <div class="submit-right">
+      <div class="submit-right-title">Assignment Description</div>
+      <div class="desc-text" id="submit-desc"></div>
+    </div>
+  </div>
+</div>
+
+
+<script src="js/api.js"></script>
+<script src="js/student.js"></script>
+
+</body>
+</html>

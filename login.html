@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #00284D;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+        }
+        .big-shape {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: 0;
+        }
+        .shape1 {
+            background: #4facfe81;
+            top: 10%;
+            left: 10%;
+        }
+        .shape2 {
+            background: #23c8ff84;
+            bottom: 10%;
+            right: 20%;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-30px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .shape1, .shape2 {
+            animation: float 6s ease-in-out infinite;
+        }
+        .main-card {
+            position: relative;
+            background-color: #ffffff;
+            padding: 50px;
+            display: flex;
+            align-items: center;
+            flex-direction:column;
+            border-radius: 20px;
+            width: 420px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            z-index: 1;
+        }
+        .logo {
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 50px; 
+        }
+        .btn-row {
+            display: flex;
+            gap:20px;
+        }
+        .go-btn {
+            flex: 1;
+            padding:18px 22px;
+            border-radius:14px; border:1.5px solid #e0dfd9;
+            cursor: pointer;
+            display: flex; flex-direction: column; align-items: center;  gap: 8px;
+            background-color: #f2f2f0;
+            font-family:'Times New Roman', Times, serif; 
+            font-size:15px; font-weight:700;
+            transition:all .15s;
+        }
+        .go-btn:hover {
+            border-color: #00284D;
+            background-color: #00284D;
+            color: white;
+            transform:translateY(-3px);
+            box-shadow:0 6px 20px rgba(0,0,0,.12);
+        }
+        .desc {
+            padding-top: 10px;
+            padding-bottom: 50px;
+        }
+        .clipboard-clock, .notebook {
+            width: 30px;
+            height: 30px;
+        }
+
+        /* login popup */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+            z-index: 10;
+        }
+        .modal-content {
+            position: relative;
+            background-color: #f2f2f2;
+            padding: 30px;
+            border-radius: 15px;
+            width: 300px;
+            height: auto;
+            animation: pop 0.25s ease;
+        }
+        .modal-header {
+            text-align: center;
+        }
+        /* Labels */
+        form label {
+            display: block;
+            font-size: 14px;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        form label span {
+            color: red;
+        }
+
+        form input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            background: #ddd;
+            outline: none;
+            font-size:14px;
+        }
+        .switch-auth {
+            margin-top: 15px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .switch-auth span {
+            color: #2a5298;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .switch-auth span:hover {
+            text-decoration: underline;
+        }
+
+        .login-btn {
+            width: 100%;
+            margin-top: 20px;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: #FFCE31;
+            color: black;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .login-btn:hover {
+            background-color: #e2bc3d;
+            transform: translateY(-2px);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        /* Animation */
+        @keyframes pop {
+        from {
+            transform: scale(0.9);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+        }
+    </style>
+</head>
+<body>
+    <div class="big-shape shape1"></div>
+    <div class="big-shape shape2"></div>
+
+    <div class="main-card">
+        <!-- <div class="header"> -->
+            <!-- Name of "web app" -->
+            <div class="logo">Checkly</div>
+
+            <div class="desc"> Choose a role to log in to</div>            
+        <!-- </div> -->
+
+
+        <div class="btn-row">
+            <button class="go-btn">
+                <span><i data-lucide="notebook" stroke-width="1.75" class="notebook"></i> </span>
+                <span class="role">Student</span>
+            </button>
+
+            <button class="go-btn">
+                <span><i data-lucide="clipboard-clock" stroke-width="1.75" class="clipboard-clock"></i> </span>
+                <span class="role">Teacher</span>
+            </button>
+        </div>
+
+    </div>
+
+
+    <!-- Login pop ups -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+
+            <div class="modal-header">
+                <h2 id="modalTitle"> Login </h2>                
+            </div>
+
+
+            <form id="authForm">
+                <label>Email <span>*</span></label>
+                <input type="text" placeholder="Fill your email address">
+
+                <label>Password <span>*</span></label>
+                <input type="password" placeholder="Fill your password">
+
+                <div id="confirmPasswordField" style="display: none;">
+                    <label>Confirm Password <span>*</span></label>
+                    <input type="password" placeholder="Confirm your password">
+                </div>
+
+                <button class="login-btn" id="submitBtn">Sign in</button>
+
+                <div class="switch-auth">
+                    Don't have an account? <span id="openSignup"> Sign up</span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        const openSignup = document.getElementById("openSignup");
+        const confirmPasswordField = document.getElementById("confirmPasswordField");
+        const submitBtn = document.getElementById("submitBtn");
+
+        let isSignup = false; 
+
+        const modal = document.getElementById("loginModal");
+        const closeBtn = document.getElementById("closeModal");
+        const modalTitle = document.getElementById("modalTitle");
+
+        const button = document.querySelectorAll(".go-btn");
+
+        button.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const role = button.querySelector(".role").innerHTML;
+
+                if (role === "Student") {
+                    modal.style.display = "flex";
+                    modalTitle.textContent = "Student Login";
+                }
+                else {
+                    modal.style.display = "flex";
+                    modalTitle.textContent = "Teacher Login";
+                }
+            })
+        });
+        function resetForm() {
+            isSignup = false;
+            modalTitle.textContent = "Login";
+            confirmPasswordField.style.display = "none";
+            submitBtn.textContent = "Sign in";
+            openSignup.textContent = "Sign up";
+        }
+        // Close modal
+        closeBtn.addEventListener("click", () => {
+            modal.style.display = "none";
+            resetForm();
+        });
+
+        // Close when clicking outside
+        window.addEventListener("click", (e) => {
+            if (e.target === modal) {
+            modal.style.display = "none";
+            }
+        });
+
+        openSignup.addEventListener("click", () => {
+            isSignup = !isSignup;
+
+            if (isSignup) {
+                modalTitle.textContent = "Sign Up";
+                confirmPasswordField.style.display = "block";
+                submitBtn.textContent = "Create Account";
+                openSignup.textContent = "Login";
+            } else {
+                modalTitle.textContent = "Login";
+                confirmPasswordField.style.display = "none";
+                submitBtn.textContent = "Sign in";
+                openSignup.textContent = "Sign up";
+            }
+        });
+    </script>
+
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>
