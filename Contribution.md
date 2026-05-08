@@ -9,14 +9,15 @@ AWS + Backend
 - create necessary S3 and dynamo
 
 ### Evidence
-- Issue #1
-- Issue #2
-- Issue #7
-- Issue #10
-- Issue #11
-- Issue #12
-- Issue #19
-- Issue #20
-- Issue #22
+- [Issue #1](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/3)
+- [Issue #2](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/4)
+- [Issue #7](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/9)
+- [Issue #10](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/12)
+- [Issue #11](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/13)
+- [Issue #12](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/14)
+- [Issue #13](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/15)
+- [Issue #19](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/22)
+- [Issue #20](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/23)
+- [Issue #22](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/25)
   
 ## xx xx
