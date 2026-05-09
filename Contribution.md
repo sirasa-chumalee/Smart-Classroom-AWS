@@ -20,4 +20,24 @@ AWS + Backend
 - [Issue #20](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/23)
 - [Issue #22](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/25)
   
-## xx xx
+## Napat Ratanametawong
+
+### Role
+Backend
+
+### Tasks
+- Developed POST Lab API
+- Developed GET File URL API
+- Developed PUT Submission API for grading
+- Developed validation Lambda functions using Amazon Rekognition and Textract
+
+### Evidence
+- [Issue #1](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/3)
+- [Issue #6](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/8)
+- [Issue #8](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/10)
+- [Issue #13](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/15)
+- [Issue #16](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/18)
+- [Issue #17](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/20)
+- [Issue #20](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/23)
+- [Issue #22](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/25)
+
