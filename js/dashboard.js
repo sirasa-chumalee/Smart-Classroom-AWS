@@ -162,16 +162,52 @@ function setCreateFile(f) {
   document.getElementById("create-dropzone").style.display = "none";
 
   document.getElementById("create-file-chip").innerHTML = `
-    <div ...>
-      <span>📄</span>
-      <span>${f.name}</span>
-      <span onclick="clearCreateFile()">✕</span>
-    </div>`;
+    <div class="file-chip">
+            <span>${f.type.includes("pdf") ? "📄" : "🖼"}</span>
+            <span>${escapeHtml(f.name)}</span>
+            <span class="chip-rm" onclick="clearCreateFile()">✕</span>
+        </div>
+    `;
+    const previewArea = document.getElementById("create-preview-area");
+
+    // IMAGE PREVIEW
+    if (f.type.startsWith("image/")) {
+
+        const url = URL.createObjectURL(f);
+
+        previewArea.innerHTML = `
+            <img src="${url}"
+                 onclick="enlargeImage(this.src)"
+                 style="
+                    max-width:200px;
+                    margin-top:12px;
+                    border-radius:10px;
+                    cursor:pointer;
+                    border:1px solid var(--border);
+                 ">
+        `;
+
+    }
+
+    // PDF PREVIEW
+    else if (f.type === "application/pdf") {
+
+        previewArea.innerHTML = `
+            <div class="pdf-preview">
+                📄 PDF selected
+            </div>
+        `;
+    }
+
+    else {
+        previewArea.innerHTML = "";
+    }
 }
 
 function clearCreateFile() {
     document.getElementById("create-file-inp").value = "";
     document.getElementById("create-file-chip").innerHTML = "";
+        document.getElementById("create-preview-area").innerHTML = "";
     document.getElementById("create-dropzone").style.display = "block";
 }
 
