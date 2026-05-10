@@ -156,6 +156,10 @@ if (!["image/png", "image/jpeg"].includes(f.type)) {
     </div>
   `;
 
+    document.getElementById("preview-area").innerHTML = `
+    <img src="${URL.createObjectURL(f)}" onclick="enlargeImage(this.src)" style="max-width:200px; cursor:pointer; margin-top:10px; border-radius:8px;">
+  `;
+  
   document.getElementById("btn-submit").disabled = false;
 }
 
@@ -163,6 +167,7 @@ function removeFile() {
     selectedFile = null;
     document.getElementById("file-inp").value = "";
     document.getElementById("file-chip").innerHTML = "";
+    document.getElementById("preview-area").innerHTML = "";
     document.getElementById("dropzone").style.display = "flex";
     document.getElementById("btn-submit").disabled = true;
 }
@@ -230,5 +235,19 @@ function toast(msg) {
   el.classList.add("show");
   setTimeout(() => el.classList.remove("show"), 3000);
 }
+
+// Enlarge image functions
+function enlargeImage(src) {
+  document.getElementById('enlarge-img').src = src;
+  document.getElementById('backdrop-enlarge').classList.add('open');
+}
+
+function closeEnlargeModal() {
+  document.getElementById('backdrop-enlarge').classList.remove('open');
+}
+
+document.getElementById('backdrop-enlarge').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeEnlargeModal();
+});
 
 init();
