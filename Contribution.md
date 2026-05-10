@@ -79,3 +79,22 @@ Frontend
 - [Issue #20](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/23)
 - [Issue #21](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/24)
 - [Issue #22](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/25)
+
+## Nuttanan Apirakcheewan
+
+### Role
+Coordinator + Backend
+
+### Tasks
+- Directed team workflows and coordinated between frontend and backend teams
+- Designed the integration between AWS Rekognition and AWS Textract
+- Designed the AWS system architecture diagram
+- Developed GET and POST Submission API
+
+### Evidence
+- [Issue #1](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/3)
+- [Issue #12](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/14)
+- [Issue #13](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/15)
+- [Issue #15](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/17)
+- [Issue #20](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/23)
+- [Issue #22](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/25)
