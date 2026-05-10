@@ -122,6 +122,21 @@ function openSubmitModal(labId) {
 }
 
 function closeSubmitModal() {
+    selectedFile = null;
+    activeLab = null;
+
+    document.getElementById("file-inp").value = "";
+
+    document.getElementById("file-chip").innerHTML = "";
+    document.getElementById("preview-area").innerHTML = "";
+    document.getElementById("result-area").innerHTML = "";
+
+    document.getElementById("dropzone").style.display = "flex";
+
+    const btn = document.getElementById("btn-submit");
+    btn.disabled = true;
+    btn.textContent = "Submit";
+
     document.getElementById("backdrop-submit").classList.remove("open");
 }
 
