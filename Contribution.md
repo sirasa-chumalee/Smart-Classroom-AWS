@@ -118,3 +118,21 @@ Backend
 - [Issue #14](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/14)
 - [Issue #20](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/20)
 - [Issue #22](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/22)
+
+## Kanyanat Krabung
+
+### Role
+Frontend
+
+### Tasks
+- Design frontend UX (Lofi)
+- Design frontend UX (Hifi)
+- Develop frontend structure for the student page and decorate follow UI design
+  
+### Evidence
+- [Issue #1](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/1)
+- [Issue #4](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/6)
+- [Issue #9](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/11)
+- [Issue #13](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/15)
+- [Issue #20](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/23)
+- [Issue #22](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/25)
