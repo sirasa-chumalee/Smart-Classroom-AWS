@@ -87,27 +87,29 @@ async function openEditModal(subId) {
     // LOAD SUBMISSION IMAGE
     if (s.fileKey) {
         try {
-            const res = await fetch(
-                `${API_BASE}/file-url?key=${encodeURIComponent(s.fileKey)}`,
-                { headers: authHeaders() }
-            );
-
-            const data = await res.json();
-            const imageUrl = JSON.parse(data.body).url;
+            const imageUrl = await apiGetSubmissionImage(s.fileKey);
 
             document.getElementById("edit-attachments").innerHTML = `
                 <img src="${imageUrl}"
                       style="max-width:100%;
-                             border-radius:8px;">`;
+                             border-radius:8px; cursor:pointer;"
+                      onclick="enlargeImage(this.src)">`;
 
         } catch (err) {
             console.error("Image load failed:", err);
+            
+            if (err?.response) {
+                console.log("Response:", err.response);
+            }
+
+            toast(err.message || "Image load failed");
+
             document.getElementById("edit-attachments").innerHTML = "Unable to load attachment.";
         }
     } else {
         document.getElementById("edit-attachments").innerHTML = "No attachment.";
     }
-
+    renderMissingKeywords(s.missingWords);
     openBackdrop("backdrop-edit");
 }
 
@@ -231,11 +233,47 @@ function cap(s) {
     return s ? s.charAt(0).toUpperCase() + s.slice(1) : "";
 }
 
+function renderMissingKeywords(words = []) {
+    const box = document.getElementById("missing-keywords");
+    const cleanWords = words.filter(Boolean);
+
+    if (!cleanWords.length) {
+        box.innerHTML = `<span class="keyword-empty">None</span>`;
+        return;
+    }
+
+    box.innerHTML = cleanWords
+        .map(word => `<span class="keyword-chip">${escapeHtml(word)}</span>`)
+        .join("");
+}
+
+function escapeHtml(value) {
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
 function toast(msg) {
     const el = document.getElementById("toast");
     el.textContent = msg;
     el.classList.add("show");
     setTimeout(() => el.classList.remove("show"), 3000);
 }
+
+// Enlarge image functions
+function enlargeImage(src) {
+  document.getElementById('enlarge-img').src = src;
+  document.getElementById('backdrop-enlarge').classList.add('open');
+}
+
+function closeEnlargeModal() {
+  document.getElementById('backdrop-enlarge').classList.remove('open');
+}
+
+document.getElementById('backdrop-enlarge').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeEnlargeModal();
+});
 
 init();

@@ -90,6 +90,39 @@
 .fb-inp:focus { border-color: #111; }
 .fb-inp::placeholder { color: var(--muted); }
 
+.missing-keywords-label { margin-top: 14px; }
+.missing-keywords-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  min-height: 38px;
+  padding: 9px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--rsm);
+  background: var(--surface);
+  align-items: center;
+}
+.keyword-chip {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: #fff1f1;
+  border: 1px solid #f1c7c7;
+  color: #9d2424;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.keyword-empty {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
 /* Create lab — description box */
 .desc-box { background: #f0f0ee; border-radius: 10px; padding: 2px; }
 .desc-box textarea { background: transparent; border: none; padding: 12px; width: 100%; resize: vertical; min-height: 110px; font-size: 13px; line-height: 1.6; }

@@ -82,7 +82,11 @@
         <input class="score-inp" type="number" id="edit-score" min="0" max="100" placeholder="–" />
         <span style="font-family:var(--mono);font-size:13px;color:var(--muted);">/100</span>
       </div>
+      <textarea class="fb-inp" id="edit-feedback" placeholder="Add feedback for student…"></textarea>
     </div>
+
+    <label class="field-label missing-keywords-label">Missing Keywords</label>
+    <div class="missing-keywords-box" id="missing-keywords"></div>
 
     <div class="modal-footer">
       <button class="btn-outline" onclick="closeBackdrop('backdrop-edit')">Cancel</button>
@@ -145,6 +149,14 @@
       <button class="btn-outline" onclick="closeBackdrop('backdrop-create')">Cancel</button>
       <button class="btn-primary" id="btn-post-lab" onclick="postLab()">Post</button>
     </div>
+  </div>
+</div>
+
+<!-- Enlarge Modal -->
+<div class="backdrop" id="backdrop-enlarge">
+  <div class="modal">
+    <button class="modal-close" onclick="closeEnlargeModal()">✕</button>
+    <img id="enlarge-img" style="max-width:100%; max-height:80vh;">
   </div>
 </div>
 

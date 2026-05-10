@@ -113,3 +113,22 @@ async function apiCreateSubmission(studentId, labId, fileKey) {
 
     return res.json();
 }
+async function apiGetSubmissionImage(fileKey) {
+
+    const res = await fetch(
+        `${API_BASE}/file-url?key=${encodeURIComponent(fileKey)}`,
+        {
+            headers: authHeaders()
+        }
+    );
+
+    if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+    }
+
+    const data = await res.json();
+
+    console.log("IMAGE RESPONSE:", data);
+
+    return data.url;
+}
