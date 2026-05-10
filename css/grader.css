@@ -122,6 +122,11 @@
   font-family: var(--mono);
   font-size: 12px;
 }
+.keyword-more {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: var(--mono);
+}
 
 /* Create lab — description box */
 .desc-box { background: #f0f0ee; border-radius: 10px; padding: 2px; }

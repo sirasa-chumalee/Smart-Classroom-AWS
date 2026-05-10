@@ -29,7 +29,7 @@ async function init() {
 function renderTable(subs) {
     const tb = document.getElementById("sub-tbody");
     if(!subs.length) {
-        tb.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:36px;font-family:var(--mono);font-size:12px;color:var(--muted);">No submissions found</td></tr>`;
+        tb.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:36px;font-family:var(--mono);font-size:12px;color:var(--muted);">No submissions found</td></tr>`;
         return;
     }
     tb.innerHTML = subs.map(s => {
@@ -44,6 +44,11 @@ function renderTable(subs) {
         <td><span class="badge badge-${s.status}">${cap(s.status)}</span></td>
         <td>${s.score ?? "-"}</td>
         <td>${s.avgConfidence ?? "-"}%</td>
+        
+        <td>
+            ${renderMissingKeywordPreview(s.missingWords)}
+        </td>
+
         <td>
           <button onclick="openEditModal('${s.submissionId}')">Edit</button>
         </td>
@@ -245,6 +250,30 @@ function renderMissingKeywords(words = []) {
     box.innerHTML = cleanWords
         .map(word => `<span class="keyword-chip">${escapeHtml(word)}</span>`)
         .join("");
+}
+
+function renderMissingKeywordPreview(words = []) {
+
+    const cleanWords = words.filter(Boolean);
+
+    if (!cleanWords.length) {
+        return `<span class="keyword-empty">None</span>`;
+    }
+
+    const visible = cleanWords.slice(0, 3);
+
+    const chips = visible
+        .map(word =>
+            `<span class="keyword-chip">${escapeHtml(word)}</span>`
+        )
+        .join(" ");
+
+    const extra =
+        cleanWords.length > 3
+            ? ` <span class="keyword-more">+${cleanWords.length - 3}</span>`
+            : "";
+
+    return chips + extra;
 }
 
 function escapeHtml(value) {
