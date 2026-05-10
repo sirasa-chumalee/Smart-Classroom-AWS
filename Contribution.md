@@ -99,7 +99,7 @@ Coordinator + Backend
 - [Issue #20](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/23)
 - [Issue #22](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/25)
 
-### Akaradech Meepojproa
+## Akaradech Meepojproa
 
 ### Role
 Backend
