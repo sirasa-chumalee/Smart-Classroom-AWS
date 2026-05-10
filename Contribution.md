@@ -98,3 +98,23 @@ Coordinator + Backend
 - [Issue #15](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/17)
 - [Issue #20](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/23)
 - [Issue #22](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/25)
+
+## Akaradech Meepojproa
+
+### Role
+Backend
+
+### Tasks
+- Design API Structure
+- Developed validation lambda using Rekognition and Testract
+- Setup Cognito and authentication system
+
+### Evidence
+- [Issue #1](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/1)
+- [Issue #2](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/2)
+- [Issue #5](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/5)
+- [Issue #8](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/8)
+- [Issue #13](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/13)
+- [Issue #14](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/14)
+- [Issue #20](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/20)
+- [Issue #22](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/22)
