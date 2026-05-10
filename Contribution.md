@@ -61,3 +61,21 @@ Frontend
 - [Issue #20](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/23)
 - [Issue #21](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/24)
 - [Issue #22](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/25)
+
+## Pawit Billamas
+
+### Role
+Frontend
+
+### Tasks
+- Developed the initial frontend structure for the student and TA pages
+- Developed the initial enlarge photo, and missing keywords display features
+- Develop frontend pages
+
+### Evidence
+- [Issue #6](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/6)
+- [Issue #9](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/11)
+- [Issue #13](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/15)
+- [Issue #20](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/23)
+- [Issue #21](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/24)
+- [Issue #22](https://github.com/sirasa-chumalee/Smart-Classroom-AWS/issues/25)
