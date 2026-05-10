@@ -142,10 +142,8 @@ async function saveGrade() {
 }
 
 function openCreateModal() {
-    console.log("OPEN MODAL");
+    resetCreateModal();
     
-    document.getElementById("new-desc").value = "";
-    document.getElementById("new-keywords").value = "";
     document.getElementById("create-title").textContent =
         "Lab " + (allLabs.length + 1);
     openBackdrop("backdrop-create");
@@ -256,12 +254,63 @@ function populateLabFilter() {
     select.innerHTML = `<option value="">Choose Lab</option>` +
         allLabs.map(l => `<option value="${l.labId}">${l.title}</option>`).join("");
 }
+function resetCreateModal() {
+    document.getElementById("new-desc").value = "";
+    document.getElementById("new-keywords").value = "";
+
+    document.getElementById("create-file-inp").value = "";
+    document.getElementById("create-file-chip").innerHTML = "";
+    document.getElementById("create-preview-area").innerHTML = "";
+
+    document.getElementById("create-dropzone").style.display = "flex";
+
+    document.getElementById("new-points").value = 100;
+
+    document.querySelector('input[name="grading"][value="points"]').checked = true;
+    document.querySelector('input[name="due"][value="none"]').checked = true;
+
+    document.getElementById("new-due").value = "";
+    document.getElementById("new-due").style.display = "none";
+
+    const btn = document.getElementById("btn-post-lab");
+    btn.disabled = false;
+    btn.textContent = "Post";
+}
+
+function resetEditModal() {
+    editingSubId = null;
+
+    document.getElementById("edit-title").textContent = "";
+
+    document.getElementById("edit-score").value = "";
+    document.getElementById("edit-feedback").value = "";
+
+    document.getElementById("edit-badge").className = "badge";
+    document.getElementById("edit-badge").textContent = "";
+
+    document.getElementById("edit-attachments").innerHTML = "";
+    document.getElementById("missing-keywords").innerHTML = "";
+
+    const btn = document.getElementById("btn-save-grade");
+    btn.disabled = false;
+    btn.textContent = "Save";
+}
+
 // Helpers
 function openBackdrop(id) {
     document.getElementById(id).classList.add("open");
 }
 
 function closeBackdrop(id) {
+
+    if (id === "backdrop-create") {
+        resetCreateModal();
+    }
+
+    if (id === "backdrop-edit") {
+        resetEditModal();
+    }
+
     document.getElementById(id).classList.remove("open");
 }
 
